@@ -181,7 +181,7 @@ screens = [
 		widget.TextBox("🔊",foreground="#00FF70"),
 		widget.Volume(foreground="#00FF70"),
                 widget.Systray(),
-                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
+                widget.Clock(format='%m-%d-%Y %a %I:%M %p'),
                 widget.QuickExit(default_text="⏼ ",foreground="#FF3535"),
             ],
             24,
