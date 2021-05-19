@@ -32,47 +32,33 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
-import os
-import subprocess
-from libqtile import hook
-
 mod = "mod4"
 terminal = guess_terminal()
 
-
-###hooks
-#start
-@hook.subscribe.startup_once
-def autostart():
-    home = os.path.expanduser('~/.config/qtile/autostart.sh')
-    subprocess.call([home])
-
-###config
-
 keys = [
     # Switch between windows
-    Key([mod], "k", lazy.layout.left(), desc="Move focus to left"),
+    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
-    Key([mod], "h", lazy.layout.down(), desc="Move focus down"),
-    Key([mod], "j", lazy.layout.up(), desc="Move focus up"),
+    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
+    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "space", lazy.layout.next(),
         desc="Move window focus to other window"),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "k", lazy.layout.shuffle_left(),
+    Key([mod, "shift"], "h", lazy.layout.shuffle_left(),
         desc="Move window to the left"),
     Key([mod, "shift"], "l", lazy.layout.shuffle_right(),
         desc="Move window to the right"),
-    Key([mod, "shift"], "h", lazy.layout.shuffle_down(),
+    Key([mod, "shift"], "j", lazy.layout.shuffle_down(),
         desc="Move window down"),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_up(), desc="Move window up"),
+    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
-    Key([mod], "o", lazy.layout.grow_left(),
+    Key([mod, "control"], "h", lazy.layout.grow_left(),
         desc="Grow window to the left"),
-    Key([mod], "p", lazy.layout.grow_right(),
+    Key([mod, "control"], "l", lazy.layout.grow_right(),
         desc="Grow window to the right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(),
         desc="Grow window down"),
@@ -89,37 +75,12 @@ keys = [
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
 
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
-    Key([mod], "b", lazy.spawn("chromium"), desc="Open Chromium Window"),
-
-    # Change the volume if our keyboard has keys
-    Key(
-        [], "XF86AudioRaiseVolume",
-        lazy.spawn("amixer -c 0 -q set Master 2dB+")
-    ),
-    Key(
-        [], "XF86AudioLowerVolume",
-        lazy.spawn("amixer -c 0 -q set Master 2dB-")
-    ),
-    Key(
-        [], "XF86AudioMute",
-        lazy.spawn("amixer -c 0 -q set Master toggle")
-    ),
-
-    # also allow changing volume the old fashioned way
-    Key(
-        [mod], "equal",
-        lazy.spawn("amixer -c 0 -q set Master 2dB+")
-    ),
-    Key(
-        [mod], "minus",
-        lazy.spawn("amixer -c 0 -q set Master 2dB-")
-    ),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -164,9 +125,9 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        top=bar.Bar(
+        bottom=bar.Bar(
             [
-		widget.TextBox("(つ▀¯▀)つ",foreground="#00A8AD"),
+                widget.CurrentLayout(),
                 widget.GroupBox(),
                 widget.Prompt(),
                 widget.WindowName(),
@@ -176,15 +137,13 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-		widget.Sep(),
-		widget.CurrentLayout(),
-		widget.TextBox("🔊",foreground="#00FF70"),
-		widget.Volume(foreground="#00FF70"),
-                widget.Systray(),
-                widget.Clock(format='%m-%d-%Y %a %I:%M %p'),
-		widget.BatteryIcon(),
-		widget.Battery(foreground="#CCAC00",format="{percent:2.0%}"),
-                widget.QuickExit(default_text="⏼ ",foreground="#FF3535"),
+#                widget.TextBox("default config", name="default"),
+#                widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
+		widget.TextBox("Hstep="ello World!",foreground="#d75f5f"),
+		widget.Volume(),
+		widget.Systray(),
+                widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
+                widget.QuickExit(),
             ],
             24,
         ),
